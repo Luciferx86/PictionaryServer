@@ -68,7 +68,9 @@ io.on('connection', function (socket) {
 
         console.log("Creating new game");
         console.log(val);
-        socket.broadcast.emit("createGame");
+        socket.broadcast.emit("createGame", {
+            code: val
+        });
     });
 
     socket.on("joinGame", function (code) {
