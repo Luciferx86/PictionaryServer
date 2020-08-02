@@ -15,9 +15,9 @@ io.on('connection', function (socket) {
 
     socket.emit("connected");
 
-    socket.on("touch", function (x, y){
+    socket.on("touch", function (x, y) {
         console.log("Touch event happened somewhere");
-        console.log(x+", "+y);
+        console.log(x + ", " + y);
         socket.broadcast.emit("touch", {
             touchX: x,
             touchY: y
@@ -25,12 +25,36 @@ io.on('connection', function (socket) {
     });
 
 
-    socket.on("move", function (x, y){
+    socket.on("move", function (x, y) {
         console.log("Move event happened somewhere");
-        console.log(x+", "+y);
+        console.log(x + ", " + y);
         socket.broadcast.emit("move", {
             touchX: x,
-            touchY: y 
+            touchY: y
+        });
+    });
+
+    socket.on("changePaint", function (color) {
+        console.log("Paint change happened somewhere");
+        console.log(color);
+        socket.broadcast.emit("changePaint", {
+            color: color
+        });
+    });
+
+    socket.on("changeWidth", function (width) {
+        console.log("Width change happened somewhere");
+        console.log(width);
+        socket.broadcast.emit("changeWidth", {
+            width: width
+        });
+    });
+
+    socket.on("undo", function (restore) {
+        console.log("Undo change happened somewhere");
+        console.log(restore);
+        socket.broadcast.emit("udno", {
+            restore: restore
         });
     });
 });
