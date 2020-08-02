@@ -57,4 +57,9 @@ io.on('connection', function (socket) {
             restore: restore
         });
     });
+
+    socket.on("clear", function () {
+        console.log("Clear change happened somewhere");
+        socket.broadcast.emit("clear");
+    });
 });
