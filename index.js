@@ -62,4 +62,20 @@ io.on('connection', function (socket) {
         console.log("Clear change happened somewhere");
         socket.broadcast.emit("clear");
     });
+
+    socket.on("createGame", function () {
+        var val = Math.floor(1000 + Math.random() * 9000);
+
+        console.log("Creating new game");
+        console.log(val);
+        socket.broadcast.emit("createGame");
+    });
+
+    socket.on("joinGame", function (code) {
+        console.log("Join game happened somewhere");
+        console.log(code);
+        socket.broadcast.emit("joinGame", {
+            code: code
+        });
+    });
 });
