@@ -5,9 +5,10 @@ var socket = io.connect("https://pictionary-server.herokuapp.com");
 console.log("socket init");
 socket.connect();
 console.log("socket connected");
-for (var i = 0; i < 100; i++) {
-    socket.emit("touch", i+3, i*3 + i);
-}
+
+socket.on("move", function (x, y) {
+    console.log("got move" + x + y);
+})
 // socket.off();
 // socket.disconnect();
 console.log("socket emitted");

@@ -28,7 +28,7 @@ io.on('connection', function (socket) {
     socket.on("move", function (x, y){
         console.log("Move event happened somewhere");
         console.log(x+", "+y);
-        socket.emit("move", {
+        socket.broadcast.emit("move", {
             touchX: x,
             touchY: y 
         });
