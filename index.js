@@ -53,7 +53,7 @@ io.on('connection', function (socket) {
     socket.on("undo", function (restore) {
         console.log("Undo change happened somewhere");
         console.log(restore);
-        socket.broadcast.emit("udno", {
+        socket.broadcast.emit("undo", {
             restore: restore
         });
     });

@@ -9,6 +9,10 @@ console.log("socket connected");
 socket.on("move", function (x, y) {
     console.log("got move" + x + y);
 })
+
+socket.on("udno", function (val) {
+    console.log("got undo" + val);
+})
 // socket.off();
 // socket.disconnect();
 console.log("socket emitted");
