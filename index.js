@@ -92,7 +92,7 @@ io.on('connection', function (socket) {
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
-        callback({ code: val });
+        callback({ gameState: allGames[val] });
         // socket.broadcast.emit("createGame", {
         //     code: val
         // });
@@ -104,12 +104,12 @@ io.on('connection', function (socket) {
 
         if (!checkPlayerExists(code, playerName)) {
 
-            allGames[code].players[playerName] = { playerName, score: 0, rank:Object.keys(allGames[code].players).length + 1 };
+            allGames[code].players[playerName] = { playerName, score: 0, rank: Object.keys(allGames[code].players).length + 1 };
             console.log("Join game happened somewhere");
             console.log(code);
             console.log("game status : ")
             console.log(allGames[code]);
-            callback({ gameStatus: allGames[code], code })
+            callback({ gameState: allGames[code], code })
         } else {
             console.log("player already exists");
         }
