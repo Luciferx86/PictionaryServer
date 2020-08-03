@@ -106,6 +106,9 @@ io.on('connection', function (socket) {
             console.log("game status : ")
             console.log(allGames[code]);
             callback({ gameState: allGames[code], code })
+            socket.broadcast.emit("joinGame", {
+                newPlayer: { playerName, score: 0, rank: allGames[code].players.length }
+            });
         } else {
             console.log("player already exists");
         }
