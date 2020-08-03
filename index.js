@@ -16,18 +16,14 @@ var checkPlayerExists = (gameCode, playerName) => {
     var game = allGames[gameCode];
     console.log(game);
     var gamePlayers = game["players"];
-    if (gamePlayers[playerName] != null) {
-        return true;
-    }
-    return false;
-    // gamePlayers.forEach((player) => {
-    //     console.log("existing player:" + player["playerName"]);
-    //     console.log("new player:" + playerName);
-    //     if (player["playerName"] == playerName) {
-    //         retVal = true;
-    //     }
-    // });
-    // return retVal;
+    gamePlayers.forEach((player) => {
+        console.log("existing player:" + player["playerName"]);
+        console.log("new player:" + playerName);
+        if (player["playerName"] == playerName) {
+            retVal = true;
+        }
+    });
+    return retVal;
 }
 
 io.on('connection', function (socket) {
@@ -87,8 +83,8 @@ io.on('connection', function (socket) {
 
     socket.on("createGame", function (playerName, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
-        allGames[val] = { players: {} };
-        allGames[val].players[playerName] = { playerName, score: 0, rank: Object.keys(allGames[val].players).length + 1 };
+        allGames[val] = { players: [] };
+        allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length + 1 });
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
@@ -104,7 +100,7 @@ io.on('connection', function (socket) {
 
         if (!checkPlayerExists(code, playerName)) {
 
-            allGames[code].players[playerName] = { playerName, score: 0, rank: Object.keys(allGames[code].players).length + 1 };
+            allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length + 1 });
             console.log("Join game happened somewhere");
             console.log(code);
             console.log("game status : ")
