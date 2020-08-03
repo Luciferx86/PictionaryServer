@@ -19,13 +19,13 @@ socket.on("udno", function (val) {
 //     console.log("game created" + code["code"]);
 // })
 
-// socket.emit("createGame", function (response) {
-//     console.log(response["code"]);
-// });
-
-socket.emit("joinGame", "Lucifer2", '9696', function (response) {
-    console.log(response);
+socket.emit("createGame", "firstUser", function (response) {
+    console.log(response["code"]);
 });
+
+// socket.emit("joinGame", "Lucifer2", '9696', function (response) {
+//     console.log(response);
+// });
 
 // socket.emit("getGames",function(){
 //     console.log("gettingGames");

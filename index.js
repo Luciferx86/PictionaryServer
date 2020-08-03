@@ -83,7 +83,7 @@ io.on('connection', function (socket) {
     socket.on("createGame", function (playerName, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
         allGames[val] = { players: [] };
-        allGames[val].players.push({ playerName, score: 0, rank: allGames[code].players.length + 1 });
+        allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length + 1 });
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
