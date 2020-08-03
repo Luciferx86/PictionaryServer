@@ -80,9 +80,10 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("clear");
     });
 
-    socket.on("createGame", function (callback) {
+    socket.on("createGame", function (playerName, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
         allGames[val] = { players: [] };
+        allGames[val].players.push({ playerName, score: 0, rank: allGames[code].players.length + 1 });
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
@@ -103,7 +104,7 @@ io.on('connection', function (socket) {
             console.log(code);
             console.log("game status : ")
             console.log(allGames[code]);
-            callback({ gameStatus: allGames[code] })
+            callback({ gameStatus: allGames[code], code })
         } else {
             console.log("player already exists");
         }
