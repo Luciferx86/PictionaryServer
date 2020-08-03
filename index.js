@@ -63,21 +63,20 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("clear");
     });
 
-    socket.on("createGame", function () {
+    socket.on("createGame", function (callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
 
         console.log("Creating new game");
         console.log(val);
-        socket.broadcast.emit("createGame", {
-            code: val
-        });
+        callback({ code: val });
+        // socket.broadcast.emit("createGame", {
+        //     code: val
+        // });
     });
 
-    socket.on("joinGame", function (code) {
+    socket.on("joinGame", function (code, callback) {
         console.log("Join game happened somewhere");
         console.log(code);
-        socket.broadcast.emit("joinGame", {
-            code: code
-        });
+        callback({ code: code })
     });
 });
