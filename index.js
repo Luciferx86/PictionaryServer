@@ -9,9 +9,26 @@ server.listen(port, function () {
 });
 
 var numUsers = 0;
+var allGames = {};
+
+var checkPlayerExists = (gameCode, playerName) => {
+    var retVal = false;
+    var game = allGames[gameCode];
+    var gamePlayers = game["players"];
+    gamePlayers.forEach((player) => {
+        console.log("existing player:" + player["playerName"]);
+        console.log("new player:" + playerName);
+        if (player["playerName"] == playerName) {
+            retVal = true;
+        }
+    });
+    return retVal;
+}
 
 io.on('connection', function (socket) {
     console.log("Someone connected");
+
+
 
     socket.emit("connected");
 
@@ -65,8 +82,9 @@ io.on('connection', function (socket) {
 
     socket.on("createGame", function (callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
-
+        allGames[val] = { players: [] };
         console.log("Creating new game");
+        console.log(allGames);
         console.log(val);
         callback({ code: val });
         // socket.broadcast.emit("createGame", {
@@ -74,9 +92,25 @@ io.on('connection', function (socket) {
         // });
     });
 
-    socket.on("joinGame", function (code, callback) {
-        console.log("Join game happened somewhere");
+    socket.on("joinGame", function (playerName, code, callback) {
         console.log(code);
-        callback({ code: code })
+        console.log(playerName);
+
+        if (!checkPlayerExists(code, playerName)) {
+
+            allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length + 1 });
+            console.log("Join game happened somewhere");
+            console.log(code);
+            console.log("game status : ")
+            console.log(allGames[code]);
+            callback({ gameStatus: allGames[code] })
+        } else {
+            console.log("player already exists");
+        }
     });
+
+    socket.on("getGames", function (callback) {
+        console.log(allGames);
+        callback();
+    })
 });
