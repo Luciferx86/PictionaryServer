@@ -23,8 +23,12 @@ socket.on("udno", function (val) {
 //     console.log(response["code"]);
 // });
 
-socket.emit("joinGame", "Lucifer2", '9574', function (response) {
-    console.log(response);
+// socket.emit("joinGame", "Lucifer2", '9574', function (response) {
+//     console.log(response);
+// });
+
+socket.emit("newMessage", "My Message", 'Luciferx86', function () {
+    console.log("Posted");
 });
 
 // socket.emit("getGames",function(){

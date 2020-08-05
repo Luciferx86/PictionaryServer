@@ -8,7 +8,6 @@ server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
 
-var numUsers = 0;
 var allGames = {};
 
 var checkPlayerExists = (gameCode, playerName) => {
@@ -112,6 +111,15 @@ io.on('connection', function (socket) {
         } else {
             console.log("player already exists");
         }
+    });
+    socket.on("newMessage", function (messageBody, messageFrom, callback) {
+        console.log("New Message happened somewhere");
+        console.log(messageBody);
+        console.log(messageFrom)
+        callback();
+        socket.broadcast.emit("newMessage", {
+            newMessage: { messageBody, messageFrom }
+        });
     });
 
     socket.on("getGames", function (callback) {
