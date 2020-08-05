@@ -105,7 +105,11 @@ io.on('connection', function (socket) {
             console.log(code);
             console.log("game status : ")
             console.log(allGames[code]);
-            callback({ gameState: allGames[code], code })
+            callback({
+                gameState: allGames[code],
+                code,
+                newPlayer: { playerName, score: 0, rank: allGames[code].players.length }
+            })
             socket.broadcast.emit("joinGame", {
                 newPlayer: { playerName, score: 0, rank: allGames[code].players.length }
             });
@@ -130,9 +134,20 @@ io.on('connection', function (socket) {
     socket.on("genRandomWords", function (callback) {
         console.log("Random Word Gen happened somewhere");
         var newWords = randomPictionaryWords(3);
-
+        console.log(newWords);
         callback({ randomWords: newWords });
 
+    });
+
+    socket.on("turnChange", function (rank, gameCode, callback) {
+        console.log("Turn Change happened somewhere");
+
+        var whoseTurn = parseInt(rank) == allGames[gameCode].players.length ? 1 : parseInt(rank) + 1
+        console.log(whoseTurn);
+        callback({ whoseTurn });
+        socket.broadcast.emit("turnChange", {
+            whoseTurn
+        })
     });
 
     socket.on("getGames", function (callback) {

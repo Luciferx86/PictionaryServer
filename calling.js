@@ -15,15 +15,15 @@ socket.on("udno", function (val) {
     console.log("got undo" + val);
 })
 
-// socket.on("createGame", function (code) {
-//     console.log("game created" + code["code"]);
-// })
+socket.on("createGame", function (code) {
+    console.log("game created" + code["code"]);
+})
 
 // socket.emit("createGame", "firstUser", function (response) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer2", '9574', function (response) {
+// socket.emit("joinGame", "Lucifer2", '7353', function (response) {
 //     console.log(response);
 // });
 
@@ -31,15 +31,19 @@ socket.on("udno", function (val) {
 //     console.log("Posted");
 // });
 
-socket.emit("genRandomWords", function (val) {
-    val["randomWords"].forEach((word) => {
-        console.log(word);
-    })
-});
+// socket.emit("genRandomWords", function (val) {
+//     val["randomWords"].forEach((word) => {
+//         console.log(word);
+//     })
+// });
 
 // socket.emit("getGames",function(){
 //     console.log("gettingGames");
 // })
+
+socket.emit("turnChange", "3", "7353", function () {
+    console.log("yoyo");
+})
 
 
 // socket.off();
