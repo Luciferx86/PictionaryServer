@@ -1,5 +1,5 @@
 var express = require('express');
-var randomWords = require('random-english-words');
+var randomPictionaryWords = require('word-pictionary-list');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -129,9 +129,9 @@ io.on('connection', function (socket) {
 
     socket.on("genRandomWords", function (callback) {
         console.log("Random Word Gen happened somewhere");
-        var newWords = randomWords({ minCount: 3 });
+        var newWords = randomPictionaryWords(3);
 
-        callback({ randomWords: newWords.split(" ") });
+        callback({ randomWords: newWords });
 
     });
 

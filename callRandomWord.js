@@ -1,5 +1,3 @@
-var randomWords = require('random-english-words');
+var randomPictionaryWords = require('word-pictionary-list');
 
-randomWords({ minCount: 3 }).split(" ").forEach(element => {
-    console.log(element);
-});
+    console.log(randomPictionaryWords(3));
