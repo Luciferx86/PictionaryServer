@@ -141,6 +141,8 @@ io.on('connection', function (socket) {
 
     socket.on("turnChange", function (rank, gameCode, callback) {
         console.log("Turn Change happened somewhere");
+        console.log(rank);
+        console.log(allGames[gameCode].players.length);
 
         var whoseTurn = parseInt(rank) == allGames[gameCode].players.length ? 1 : parseInt(rank) + 1
         console.log(whoseTurn);
