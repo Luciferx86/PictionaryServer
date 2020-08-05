@@ -88,7 +88,10 @@ io.on('connection', function (socket) {
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
-        callback({ gameState: allGames[val], code: val });
+        callback({
+            gameState: allGames[val], code: val,
+            newPlayer: { playerName, score: 0, rank: allGames[code].players.length }
+        });
         // socket.broadcast.emit("createGame", {
         //     code: val
         // });
