@@ -27,8 +27,14 @@ socket.on("udno", function (val) {
 //     console.log(response);
 // });
 
-socket.emit("newMessage", "My Message", 'Luciferx86', function () {
-    console.log("Posted");
+// socket.emit("newMessage", "My Message", 'Luciferx86', function () {
+//     console.log("Posted");
+// });
+
+socket.emit("genRandomWords", function (val) {
+    val["randomWords"].forEach((word) => {
+        console.log(word);
+    })
 });
 
 // socket.emit("getGames",function(){
