@@ -108,6 +108,10 @@ io.on('connection', function (socket) {
             socket.broadcast.emit("joinGame", {
                 newPlayer: { playerName, score: 0, rank: allGames[code].players.length }
             });
+
+            socket.broadcast.emit("newMessage", {
+                newMessage: { messageBody: playerName + " joined!", messageFrom: "Game" }
+            });
         } else {
             console.log("player already exists");
         }
