@@ -182,7 +182,7 @@ io.on('connection', function (socket) {
         console.log(word);
         allGames[gameCode].currentWord = word;
 
-        callback();
+        callback({ wordLength: word.length });
         socket.broadcast.emit("startGame");
     });
 
