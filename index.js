@@ -182,7 +182,7 @@ io.on('connection', function (socket) {
         console.log(word);
         allGames[gameCode].currentWord = word;
 
-        callback();
+
         var hint = "";
         var seperatedWords = word.split(" ");
         seperatedWords.forEach(word => {
@@ -191,6 +191,7 @@ io.on('connection', function (socket) {
         })
         hint = hint.substring(0, hint.length - 3);
         console.log(hint);
+        callback({ wordHint: hint });
         socket.broadcast.emit("wordSelect", { wordHint: hint });
     });
 
