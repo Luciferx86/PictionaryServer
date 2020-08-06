@@ -20,14 +20,14 @@ socket.on("udno", function (val) {
 
 socket.on("createGame", function (code) {
     console.log("game created" + code["code"]);
-    
+
 })
 
 // socket.emit("createGame", "firstUser", function (response) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer2", '4580', function (response) {
+// socket.emit("joinGame", "Lucifer2", '1654', function (response) {
 //     console.log(response);
 // });
 
@@ -50,14 +50,14 @@ socket.on("createGame", function (code) {
 //     console.log("yoyo");
 // })
 
-// socket.emit("wordSelect", "ipad", '4580', function (response) {
-//     console.log("selected word");
-// });
+socket.emit("wordSelect", "web web", '1654', function (response) {
+    console.log("selected word");
+});
 
 
 // socket.off();
 // socket.disconnect();
 console.log("socket emitted");
 
-console.log("yoyo".toUpperCase() === "YoYo".toUpperCase());
+// console.log("yoyo".toUpperCase() === "YoYo".toUpperCase());
 // socket.emit("touch",0,0);

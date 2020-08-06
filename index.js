@@ -183,7 +183,15 @@ io.on('connection', function (socket) {
         allGames[gameCode].currentWord = word;
 
         callback();
-        socket.broadcast.emit("wordSelect", { wordLength: word.length });
+        var hint = "";
+        var seperatedWords = word.split(" ");
+        seperatedWords.forEach(word => {
+            hint += "_ ".repeat(word.length).substring(0, 2 * word.length - 1);
+            hint += "   ";
+        })
+        hint = hint.substring(0, hint.length - 3);
+        console.log(hint);
+        socket.broadcast.emit("wordSelect", { wordHint: hint });
     });
 
     socket.on("getGames", function (callback) {
