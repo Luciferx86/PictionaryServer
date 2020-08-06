@@ -128,8 +128,10 @@ io.on('connection', function (socket) {
     });
     socket.on("newMessage", function (messageBody, messageFrom, gameCode, callback) {
         console.log("New Message happened somewhere");
-        console.log(messageBody);
+
         console.log(messageFrom);
+        console.log("new guess: " + messageBody);
+        console.log("original word: " + allGames[gameCode].currentWord);
         if (messageBody == allGames[gameCode].currentWord) {
             callback({ wordGuessed: true });
             socket.broadcast.emit("newMessage", {

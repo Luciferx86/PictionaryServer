@@ -3,6 +3,9 @@ var io = require('socket.io-client')
 console.log("socket init");
 var socket = io.connect("http://localhost:3000/")
 // var socket = io.connect("https://pictionary-server.herokuapp.com");
+
+
+
 console.log("socket init");
 socket.connect();
 console.log("socket connected");
@@ -17,19 +20,21 @@ socket.on("udno", function (val) {
 
 socket.on("createGame", function (code) {
     console.log("game created" + code["code"]);
+    
 })
 
 // socket.emit("createGame", "firstUser", function (response) {
 //     console.log(response["code"]);
 // });
 
-socket.emit("joinGame", "Lucifer2", '2145', function (response) {
-    console.log(response);
-});
-
-// socket.emit("newMessage", "My Message", 'Luciferx86', function () {
-//     console.log("Posted");
+// socket.emit("joinGame", "Lucifer2", '4580', function (response) {
+//     console.log(response);
 // });
+
+socket.emit("newMessage", "ipad", 'Luciferx86', "4580", function (response) {
+    console.log(response);
+    console.log("Posted");
+});
 
 // socket.emit("genRandomWords", function (val) {
 //     val["randomWords"].forEach((word) => {
@@ -44,6 +49,10 @@ socket.emit("joinGame", "Lucifer2", '2145', function (response) {
 // socket.emit("turnChange", "3", "7353", function () {
 //     console.log("yoyo");
 // })
+
+// socket.emit("wordSelect", "ipad", '4580', function (response) {
+//     console.log("selected word");
+// });
 
 
 // socket.off();
