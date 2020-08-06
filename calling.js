@@ -23,9 +23,9 @@ socket.on("createGame", function (code) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer2", '7353', function (response) {
-//     console.log(response);
-// });
+socket.emit("joinGame", "Lucifer2", '2145', function (response) {
+    console.log(response);
+});
 
 // socket.emit("newMessage", "My Message", 'Luciferx86', function () {
 //     console.log("Posted");
@@ -41,9 +41,9 @@ socket.on("createGame", function (code) {
 //     console.log("gettingGames");
 // })
 
-socket.emit("turnChange", "3", "7353", function () {
-    console.log("yoyo");
-})
+// socket.emit("turnChange", "3", "7353", function () {
+//     console.log("yoyo");
+// })
 
 
 // socket.off();

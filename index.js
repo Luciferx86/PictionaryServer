@@ -85,6 +85,8 @@ io.on('connection', function (socket) {
         var val = Math.floor(1000 + Math.random() * 9000);
         allGames[val] = { players: [] };
         allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length + 1 });
+        allGames[val].isStarted = false;
+        allGames[val].currentWord = "";
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
@@ -124,14 +126,23 @@ io.on('connection', function (socket) {
             console.log("player already exists");
         }
     });
-    socket.on("newMessage", function (messageBody, messageFrom, callback) {
+    socket.on("newMessage", function (messageBody, messageFrom, gameCode, callback) {
         console.log("New Message happened somewhere");
         console.log(messageBody);
-        console.log(messageFrom)
-        callback();
-        socket.broadcast.emit("newMessage", {
-            newMessage: { messageBody, messageFrom }
-        });
+        console.log(messageFrom);
+        if (messageBody == allGames[gameCode].currentWord) {
+            callback({ wordGuessed: true });
+            socket.broadcast.emit("newMessage", {
+                newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
+            });
+        } else {
+            callback({ wordGuessed: false });
+            socket.broadcast.emit("newMessage", {
+                newMessage: { messageBody, messageFrom }
+            });
+        }
+
+
     });
 
     socket.on("genRandomWords", function (callback) {
@@ -158,6 +169,16 @@ io.on('connection', function (socket) {
     socket.on("startGame", function (gameCode, callback) {
         console.log("Game Start happened somewhere");
         console.log(gameCode);
+        allGames[gameCode].isStarted = true;
+
+        callback();
+        socket.broadcast.emit("startGame");
+    });
+
+    socket.on("wordSelect", function (word, gameCode, callback) {
+        console.log("Word Select happened somewhere");
+        console.log(word);
+        allGames[gameCode].currentWord = word;
 
         callback();
         socket.broadcast.emit("startGame");
