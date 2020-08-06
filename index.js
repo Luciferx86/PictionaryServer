@@ -132,7 +132,7 @@ io.on('connection', function (socket) {
         console.log(messageFrom);
         console.log("new guess: " + messageBody);
         console.log("original word: " + allGames[gameCode].currentWord);
-        if (messageBody == allGames[gameCode].currentWord) {
+        if (messageBody.toUpperCase() === allGames[gameCode].currentWord.toUpperCase()) {
             callback({ wordGuessed: true });
             socket.broadcast.emit("newMessage", {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }

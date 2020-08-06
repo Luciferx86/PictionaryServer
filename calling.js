@@ -31,10 +31,10 @@ socket.on("createGame", function (code) {
 //     console.log(response);
 // });
 
-socket.emit("newMessage", "ipad", 'Luciferx86', "4580", function (response) {
-    console.log(response);
-    console.log("Posted");
-});
+// socket.emit("newMessage", "ipad", 'Luciferx86', "4580", function (response) {
+//     console.log(response);
+//     console.log("Posted");
+// });
 
 // socket.emit("genRandomWords", function (val) {
 //     val["randomWords"].forEach((word) => {
@@ -58,4 +58,6 @@ socket.emit("newMessage", "ipad", 'Luciferx86', "4580", function (response) {
 // socket.off();
 // socket.disconnect();
 console.log("socket emitted");
+
+console.log("yoyo".toUpperCase() === "YoYo".toUpperCase());
 // socket.emit("touch",0,0);
