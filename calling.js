@@ -27,7 +27,7 @@ socket.on("createGame", function (code) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer2", '1654', function (response) {
+// socket.emit("joinGame", "Lucifer2", '4044', function (response) {
 //     console.log(response);
 // });
 
@@ -50,7 +50,7 @@ socket.on("createGame", function (code) {
 //     console.log("yoyo");
 // })
 
-socket.emit("wordSelect", "web web", '1654', function (response) {
+socket.emit("wordSelect", "web develop", '4044', function (response) {
     console.log("selected word");
 });
 

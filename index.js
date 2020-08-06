@@ -182,16 +182,25 @@ io.on('connection', function (socket) {
         console.log(word);
         allGames[gameCode].currentWord = word;
 
-
+        var originalWord = "";
         var hint = "";
         var seperatedWords = word.split(" ");
         seperatedWords.forEach(word => {
+            for (var i = 0; i < word.length; i++) {
+                originalWord += word[i];
+                originalWord += " ";
+            }
+
             hint += "_ ".repeat(word.length).substring(0, 2 * word.length - 1);
             hint += "   ";
+            originalWord += "  ";
         })
         hint = hint.substring(0, hint.length - 3);
+        originalWord = originalWord.substring(0, originalWord.length - 3);
+
         console.log(hint);
-        callback({ wordHint: hint });
+        console.log(originalWord);
+        callback({ wordHint: originalWord });
         socket.broadcast.emit("wordSelect", { wordHint: hint });
     });
 
