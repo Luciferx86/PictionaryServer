@@ -155,6 +155,14 @@ io.on('connection', function (socket) {
         })
     });
 
+    socket.on("startGame", function (gameCode, callback) {
+        console.log("Game Start happened somewhere");
+        console.log(gameCode);
+
+        callback();
+        socket.broadcast.emit("startGame");
+    });
+
     socket.on("getGames", function (callback) {
         console.log(allGames);
         callback();
