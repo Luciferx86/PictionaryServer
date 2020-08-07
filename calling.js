@@ -1,4 +1,5 @@
-var io = require('socket.io-client')
+var io = require('socket.io-client');
+const { response } = require('express');
 // var socket = io.socket("http://localhost:3000/")
 console.log("socket init");
 var socket = io.connect("http://localhost:3000/")
@@ -27,14 +28,22 @@ socket.on("createGame", function (code) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer2", '4044', function (response) {
+// socket.emit("joinGame", "Lucifer3", '1902', function (response) {
 //     console.log(response);
 // });
 
-// socket.emit("newMessage", "ipad", 'Luciferx86', "4580", function (response) {
+// socket.emit("startGame", "1901", function (response) {
 //     console.log(response);
-//     console.log("Posted");
-// });
+// })
+
+// socket.emit("wordSelect", "facebook", "1901", function (response) {
+//     console.log(response);
+// })
+
+socket.emit("newMessage", "facebsssook", '1', "1902", function (response) {
+    console.log(response);
+    console.log("Posted");
+});
 
 // socket.emit("genRandomWords", function (val) {
 //     val["randomWords"].forEach((word) => {
@@ -50,9 +59,11 @@ socket.on("createGame", function (code) {
 //     console.log("yoyo");
 // })
 
-socket.emit("wordSelect", "web develop", '4044', function (response) {
-    console.log("selected word");
-});
+// socket.emit("wordSelect", "web develop", '4044', function (response) {
+//     console.log("selected word");
+// });
+
+
 
 
 // socket.off();
