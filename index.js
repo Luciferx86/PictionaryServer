@@ -84,15 +84,16 @@ io.on('connection', function (socket) {
     socket.on("createGame", function (playerName, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
         allGames[val] = { players: [] };
-        allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length + 1 });
+        allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length });
         allGames[val].isStarted = false;
         allGames[val].currentWord = "";
+        allGames[val].whoseDrawing = 0;
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
         callback({
             gameState: allGames[val], code: val,
-            newPlayer: { playerName, score: 0, rank: allGames[val].players.length }
+            newPlayer: { playerName, score: 0, rank: allGames[val].players.length - 1 }
         });
         // socket.broadcast.emit("createGame", {
         //     code: val
@@ -105,7 +106,7 @@ io.on('connection', function (socket) {
 
         if (!checkPlayerExists(code, playerName)) {
 
-            allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length + 1 });
+            allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length });
             console.log("Join game happened somewhere");
             console.log(code);
             console.log("game status : ")
@@ -113,10 +114,10 @@ io.on('connection', function (socket) {
             callback({
                 gameState: allGames[code],
                 code,
-                newPlayer: { playerName, score: 0, rank: allGames[code].players.length }
+                newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
             })
             socket.broadcast.emit("joinGame", {
-                newPlayer: { playerName, score: 0, rank: allGames[code].players.length }
+                newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
             });
 
             socket.broadcast.emit("newMessage", {
@@ -126,17 +127,26 @@ io.on('connection', function (socket) {
             console.log("player already exists");
         }
     });
-    socket.on("newMessage", function (messageBody, messageFrom, gameCode, callback) {
+    socket.on("newMessage", function (messageBody, messageFromIndex, gameCode, callback) {
         console.log("New Message happened somewhere");
 
-        console.log(messageFrom);
+        console.log(messageFromIndex);
         console.log("new guess: " + messageBody);
         console.log("original word: " + allGames[gameCode].currentWord);
+
         if (messageBody.toUpperCase() === allGames[gameCode].currentWord.toUpperCase()) {
             callback({ wordGuessed: true });
+            markPlayerHasGuessed(gameCode, messageFromIndex);
+            var messageFrom = allGames[gameCode].players[messageFromIndex].playerName;
             socket.broadcast.emit("newMessage", {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
             });
+            if (checkIfAllPlayersGuessed(allGames[gameCode])) {
+                var whoseTurn = parseInt(allGames[gameCode].whoseDrawing + 1) == allGames[gameCode].players.length ? 1 : parseInt(allGames[gameCode].whoseDrawing + 1) + 1;
+                socket.broadcast.emit("turnChange", {
+                    whoseTurn
+                })
+            }
         } else {
             callback({ wordGuessed: false });
             socket.broadcast.emit("newMessage", {
@@ -147,6 +157,10 @@ io.on('connection', function (socket) {
 
     });
 
+    function markPlayerHasGuessed(gameCode, playerIndex) {
+        allGames[gameCode].players[playerIndex].hasGuessedCurrent = true;
+    }
+
     socket.on("genRandomWords", function (callback) {
         console.log("Random Word Gen happened somewhere");
         var newWords = randomPictionaryWords(3);
@@ -155,12 +169,27 @@ io.on('connection', function (socket) {
 
     });
 
+    function checkIfAllPlayersGuessed(gamestate) {
+        var retVal = true;
+        for (var i = 0; i < gamestate.players.length; i++) {
+            if (i == gamestate.whoseDrawing) {
+                continue;
+            } else {
+                if (gamestate.players[i].hasGuessedCurrent == false) {
+                    retVal = false
+                }
+            }
+        }
+        return retVal;
+    }
+
     socket.on("turnChange", function (rank, gameCode, callback) {
         console.log("Turn Change happened somewhere");
         console.log(rank);
         console.log(allGames[gameCode].players.length);
 
-        var whoseTurn = parseInt(rank) == allGames[gameCode].players.length ? 1 : parseInt(rank) + 1
+        var whoseTurn = parseInt(rank + 1) == allGames[gameCode].players.length ? 1 : parseInt(rank + 1) + 1
+        allGames[gameCode].whoseDrawing = whoseTurn;
         console.log(whoseTurn);
         callback({ whoseTurn });
         socket.broadcast.emit("turnChange", {
@@ -172,6 +201,7 @@ io.on('connection', function (socket) {
         console.log("Game Start happened somewhere");
         console.log(gameCode);
         allGames[gameCode].isStarted = true;
+        allGames[gameCode].whoseDrawing = 0;
         var newWords = randomPictionaryWords(3);
         callback({ randomWords: newWords });
         socket.broadcast.emit("startGame");
