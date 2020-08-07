@@ -133,16 +133,17 @@ io.on('connection', function (socket) {
         console.log(messageFromIndex);
         console.log("new guess: " + messageBody);
         console.log("original word: " + allGames[gameCode].currentWord);
+        var messageFrom = allGames[gameCode].players[messageFromIndex].playerName;
 
         if (messageBody.toUpperCase() === allGames[gameCode].currentWord.toUpperCase()) {
             callback({ wordGuessed: true });
             markPlayerHasGuessed(gameCode, messageFromIndex);
-            var messageFrom = allGames[gameCode].players[messageFromIndex].playerName;
+
             socket.broadcast.emit("newMessage", {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
             });
             if (checkIfAllPlayersGuessed(allGames[gameCode])) {
-                var whoseTurn = parseInt(allGames[gameCode].whoseDrawing + 1) == allGames[gameCode].players.length ? 1 : parseInt(allGames[gameCode].whoseDrawing + 1) + 1;
+                var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0: parseInt(allGames[gameCode].whoseDrawing) + 1;
                 socket.broadcast.emit("turnChange", {
                     whoseTurn
                 })

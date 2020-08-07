@@ -28,7 +28,7 @@ socket.on("createGame", function (code) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer3", '1901', function (response) {
+// socket.emit("joinGame", "Lucifer3", '1902', function (response) {
 //     console.log(response);
 // });
 
@@ -40,7 +40,7 @@ socket.on("createGame", function (code) {
 //     console.log(response);
 // })
 
-socket.emit("newMessage", "facebook", '1', "1901", function (response) {
+socket.emit("newMessage", "facebsssook", '1', "1902", function (response) {
     console.log(response);
     console.log("Posted");
 });

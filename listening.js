@@ -18,3 +18,7 @@ socket.on("newMessage", function (response) {
 socket.on("turnChange", function (response) {
     console.log(response);
 })
+
+socket.on("joinGame", function (response) {
+    console.log(response);
+})
