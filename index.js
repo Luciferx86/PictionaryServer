@@ -172,8 +172,8 @@ io.on('connection', function (socket) {
         console.log("Game Start happened somewhere");
         console.log(gameCode);
         allGames[gameCode].isStarted = true;
-
-        callback();
+        var newWords = randomPictionaryWords(3);
+        callback({ randomWords: newWords });
         socket.broadcast.emit("startGame");
     });
 
