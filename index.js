@@ -143,7 +143,8 @@ io.on('connection', function (socket) {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
             });
             if (checkIfAllPlayersGuessed(allGames[gameCode])) {
-                var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0: parseInt(allGames[gameCode].whoseDrawing) + 1;
+                var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
+                allGams[gameCode].whoseDrawing = whoseTurn;
                 socket.broadcast.emit("turnChange", {
                     whoseTurn
                 })
