@@ -36,11 +36,11 @@ socket.on("createGame", function (code) {
 //     console.log(response);
 // })
 
-// socket.emit("wordSelect", "twitter", "3279", function (response) {
+// socket.emit("wordSelect", "porno", "3279", function (response) {
 //     console.log(response);
 // })
 
-socket.emit("newMessage", "twitter", '1', "3279", function (response) {
+socket.emit("newMessage", "porno", '2', "3279", function (response) {
     console.log(response);
     console.log("Posted");
 });

@@ -84,7 +84,7 @@ io.on('connection', function (socket) {
     socket.on("createGame", function (playerName, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
         allGames[val] = { players: [] };
-        allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length });
+        allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length, hasGuessedCurrent: false });
         allGames[val].isStarted = false;
         allGames[val].currentWord = "";
         allGames[val].whoseDrawing = 0;
@@ -136,7 +136,7 @@ io.on('connection', function (socket) {
         var messageFrom = allGames[gameCode].players[messageFromIndex].playerName;
 
         if (messageBody.toUpperCase() === allGames[gameCode].currentWord.toUpperCase()) {
-            callback({ wordGuessed: true });
+            // callback({ wordGuessed: true });
             markPlayerHasGuessed(gameCode, messageFromIndex);
 
             socket.broadcast.emit("newMessage", {
@@ -148,12 +148,13 @@ io.on('connection', function (socket) {
                 allGames[gameCode].whoseDrawing = whoseTurn;
                 console.log("changing turn");
                 console.log(whoseTurn);
+                callback({ wordGuessed: true, isMyTurn: messageFromIndex == whoseTurn })
                 socket.broadcast.emit("turnChange", {
                     whoseTurn
                 })
             }
         } else {
-            callback({ wordGuessed: false });
+            callback({ wordGuessed: false, isMyTurn: false });
             socket.broadcast.emit("newMessage", {
                 newMessage: { messageBody, messageFrom }
             });
