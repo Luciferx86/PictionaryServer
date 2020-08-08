@@ -106,7 +106,7 @@ io.on('connection', function (socket) {
 
         if (!checkPlayerExists(code, playerName)) {
 
-            allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length });
+            allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length, hasGuessedCurrent: false });
             console.log("Join game happened somewhere");
             console.log(code);
             console.log("game status : ")
@@ -143,8 +143,11 @@ io.on('connection', function (socket) {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
             });
             if (checkIfAllPlayersGuessed(allGames[gameCode])) {
+                resetHasGuessed(gameCode);
                 var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
                 allGames[gameCode].whoseDrawing = whoseTurn;
+                console.log("changing turn");
+                console.log(whoseTurn);
                 socket.broadcast.emit("turnChange", {
                     whoseTurn
                 })
@@ -161,6 +164,12 @@ io.on('connection', function (socket) {
 
     function markPlayerHasGuessed(gameCode, playerIndex) {
         allGames[gameCode].players[playerIndex].hasGuessedCurrent = true;
+    }
+
+    function resetHasGuessed(gameCode) {
+        for (var i = 0; i < allGames[gameCode].players.length; i++) {
+            allGames[gameCode].players[i].hasGuessedCurrent = false;
+        }
     }
 
     socket.on("genRandomWords", function (callback) {
@@ -190,7 +199,7 @@ io.on('connection', function (socket) {
         console.log(rank);
         console.log(allGames[gameCode].players.length);
 
-        var whoseTurn = parseInt(rank + 1) == allGames[gameCode].players.length ? 1 : parseInt(rank + 1) + 1
+        var whoseTurn = parseInt(rank) + 1 == allGames[gameCode].players.length ? 1 : parseInt(rank) + 1 + 1
         allGames[gameCode].whoseDrawing = whoseTurn;
         console.log(whoseTurn);
         callback({ whoseTurn });

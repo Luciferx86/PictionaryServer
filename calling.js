@@ -28,19 +28,19 @@ socket.on("createGame", function (code) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer3", '1902', function (response) {
+// socket.emit("joinGame", "Lucifer35", '3279', function (response) {
 //     console.log(response);
 // });
 
-// socket.emit("startGame", "1901", function (response) {
+// socket.emit("startGame", "3279", function (response) {
 //     console.log(response);
 // })
 
-// socket.emit("wordSelect", "facebook", "1901", function (response) {
+// socket.emit("wordSelect", "twitter", "3279", function (response) {
 //     console.log(response);
 // })
 
-socket.emit("newMessage", "facebsssook", '1', "1902", function (response) {
+socket.emit("newMessage", "twitter", '1', "3279", function (response) {
     console.log(response);
     console.log("Posted");
 });
