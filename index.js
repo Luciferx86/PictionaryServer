@@ -144,7 +144,7 @@ io.on('connection', function (socket) {
             });
             if (checkIfAllPlayersGuessed(allGames[gameCode])) {
                 var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
-                allGams[gameCode].whoseDrawing = whoseTurn;
+                allGames[gameCode].whoseDrawing = whoseTurn;
                 socket.broadcast.emit("turnChange", {
                     whoseTurn
                 })
