@@ -1,5 +1,6 @@
 var express = require('express');
 var randomPictionaryWords = require('word-pictionary-list');
+const { globalAgent } = require('http');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -33,56 +34,11 @@ io.on('connection', function (socket) {
 
     socket.emit("connected");
 
-    socket.on("touch", function (x, y) {
-        console.log("Touch event happened somewhere");
-        console.log(x + ", " + y);
-        socket.broadcast.emit("touch", {
-            touchX: x,
-            touchY: y
-        });
-    });
-
-
-    socket.on("move", function (x, y) {
-        console.log("Move event happened somewhere");
-        console.log(x + ", " + y);
-        socket.broadcast.emit("move", {
-            touchX: x,
-            touchY: y
-        });
-    });
-
-    socket.on("changePaint", function (color) {
-        console.log("Paint change happened somewhere");
-        console.log(color);
-        socket.broadcast.emit("changePaint", {
-            color: color
-        });
-    });
-
-    socket.on("changeWidth", function (width) {
-        console.log("Width change happened somewhere");
-        console.log(width);
-        socket.broadcast.emit("changeWidth", {
-            width: width
-        });
-    });
-
-    socket.on("undo", function (restore) {
-        console.log("Undo change happened somewhere");
-        console.log(restore);
-        socket.broadcast.emit("undo", {
-            restore: restore
-        });
-    });
-
-    socket.on("clear", function () {
-        console.log("Clear change happened somewhere");
-        socket.broadcast.emit("clear");
-    });
+    var globalGameCode = 0;
 
     socket.on("createGame", function (playerName, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
+        globalGameCode = val;
         allGames[val] = { players: [] };
         allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length, hasGuessedCurrent: false });
         allGames[val].isStarted = false;
@@ -96,34 +52,86 @@ io.on('connection', function (socket) {
             gameState: allGames[val], code: val,
             newPlayer: { playerName, score: 0, rank: allGames[val].players.length - 1 }
         });
+        socket.join(val);
         // socket.broadcast.emit("createGame", {
         //     code: val
         // });
     });
 
-    socket.on("joinGame", function (playerName, code, callback) {
-        console.log(code);
+    socket.on("touch", function (x, y) {
+        console.log("Touch event happened somewhere");
+        console.log(x + ", " + y);
+        socket.in(globalGameCode).broadcast.emit("touch", {
+            touchX: x,
+            touchY: y
+        });
+    });
+
+
+    socket.on("move", function (x, y) {
+        console.log("Move event happened somewhere");
+        console.log(x + ", " + y);
+        socket.in(globalGameCode).broadcast.emit("move", {
+            touchX: x,
+            touchY: y
+        });
+    });
+
+    socket.on("changePaint", function (color) {
+        console.log("Paint change happened somewhere");
+        console.log(color);
+        socket.in(globalGameCode).broadcast.emit("changePaint", {
+            color: color
+        });
+    });
+
+    socket.on("changeWidth", function (width) {
+        console.log("Width change happened somewhere");
+        console.log(width);
+        socket.in(globalGameCode).broadcast.emit("changeWidth", {
+            width: width
+        });
+    });
+
+    socket.on("undo", function (restore) {
+        console.log("Undo change happened somewhere");
+        console.log(restore);
+        socket.in(globalGameCode).broadcast.emit("undo", {
+            restore: restore
+        });
+    });
+
+    socket.on("clear", function () {
+        console.log("Clear change happened somewhere");
+        socket.in(globalGameCode).broadcast.emit("clear");
+    });
+
+
+
+    socket.on("joinGame", function (playerName, gameCode, callback) {
+        console.log(gameCode);
         console.log(playerName);
+        socket.join(gameCode);
 
-        if (allGames[code] != null) {
+        if (allGames[gameCode] != null) {
 
-            if (!checkPlayerExists(code, playerName)) {
+            if (!checkPlayerExists(gameCode, playerName)) {
 
-                allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length, hasGuessedCurrent: false });
+                allGames[gameCode].players.push({ playerName, score: 0, rank: allGames[gameCode].players.length, hasGuessedCurrent: false });
                 console.log("Join game happened somewhere");
-                console.log(code);
+                console.log(gameCode);
                 console.log("game status : ")
-                console.log(allGames[code]);
+                console.log(allGames[gameCode]);
                 callback({
-                    gameState: allGames[code],
-                    code,
-                    newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
+                    gameState: allGames[gameCode],
+                    gameCode,
+                    newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1 }
                 })
-                socket.broadcast.emit("joinGame", {
-                    newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
+                socket.in(gameCode).broadcast.emit("joinGame", {
+                    newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1 }
                 });
 
-                socket.broadcast.emit("newMessage", {
+                socket.in(gameCode).broadcast.emit("newMessage", {
                     newMessage: { messageBody: playerName + " joined!", messageFrom: "Game" }
                 });
             } else {
@@ -146,7 +154,7 @@ io.on('connection', function (socket) {
             // callback({ wordGuessed: true });
             markPlayerHasGuessed(gameCode, messageFromIndex);
 
-            socket.broadcast.emit("newMessage", {
+            socket.in(gameCode).broadcast.emit("newMessage", {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
             });
             if (checkIfAllPlayersGuessed(allGames[gameCode])) {
@@ -157,13 +165,13 @@ io.on('connection', function (socket) {
                 console.log(whoseTurn);
                 clearInterval(allGames[gameCode].timer);
                 callback({ wordGuessed: true, isMyTurn: messageFromIndex == whoseTurn })
-                socket.broadcast.emit("turnChange", {
+                socket.broadcast.in(gameCode).emit("turnChange", {
                     whoseTurn
                 })
             }
         } else {
             callback({ wordGuessed: false, isMyTurn: false });
-            socket.broadcast.emit("newMessage", {
+            socket.in(gameCode).broadcast.emit("newMessage", {
                 newMessage: { messageBody, messageFrom }
             });
         }
@@ -212,7 +220,7 @@ io.on('connection', function (socket) {
         allGames[gameCode].whoseDrawing = whoseTurn;
         console.log(whoseTurn);
         callback({ whoseTurn });
-        socket.broadcast.emit("turnChange", {
+        socket.in(gameCode).broadcast.emit("turnChange", {
             whoseTurn
         })
     });
@@ -224,7 +232,7 @@ io.on('connection', function (socket) {
         allGames[gameCode].whoseDrawing = 0;
         var newWords = randomPictionaryWords(3);
         callback({ randomWords: newWords });
-        socket.broadcast.emit("startGame");
+        socket.in(gameCode).broadcast.emit("startGame");
     });
 
     socket.on("wordSelect", function (word, gameCode, callback) {
@@ -252,9 +260,9 @@ io.on('connection', function (socket) {
         console.log(originalWord);
         callback({ wordHint: originalWord });
         var timerVal = 89;
-        socket.broadcast.emit("wordSelect", { wordHint: hint });
+        socket.in(gameCode).broadcast.emit("wordSelect", { wordHint: hint });
         allGames[gameCode].timer = setInterval(() => {
-            socket.broadcast.emit("timerVal", { timerVal: timerVal-- });
+            socket.in(gameCode).broadcast.emit("timerVal", { timerVal: timerVal-- });
             if (timerVal == 0) {
                 clearInterval(allGames[gameCode].timer);
                 console.log("done");
