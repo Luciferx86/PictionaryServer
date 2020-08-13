@@ -104,27 +104,33 @@ io.on('connection', function (socket) {
         console.log(code);
         console.log(playerName);
 
-        if (!checkPlayerExists(code, playerName)) {
+        if (allGames[code] != null) {
 
-            allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length, hasGuessedCurrent: false });
-            console.log("Join game happened somewhere");
-            console.log(code);
-            console.log("game status : ")
-            console.log(allGames[code]);
-            callback({
-                gameState: allGames[code],
-                code,
-                newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
-            })
-            socket.broadcast.emit("joinGame", {
-                newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
-            });
+            if (!checkPlayerExists(code, playerName)) {
 
-            socket.broadcast.emit("newMessage", {
-                newMessage: { messageBody: playerName + " joined!", messageFrom: "Game" }
-            });
+                allGames[code].players.push({ playerName, score: 0, rank: allGames[code].players.length, hasGuessedCurrent: false });
+                console.log("Join game happened somewhere");
+                console.log(code);
+                console.log("game status : ")
+                console.log(allGames[code]);
+                callback({
+                    gameState: allGames[code],
+                    code,
+                    newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
+                })
+                socket.broadcast.emit("joinGame", {
+                    newPlayer: { playerName, score: 0, rank: allGames[code].players.length - 1 }
+                });
+
+                socket.broadcast.emit("newMessage", {
+                    newMessage: { messageBody: playerName + " joined!", messageFrom: "Game" }
+                });
+            } else {
+                console.log("player already exists");
+            }
         } else {
-            console.log("player already exists");
+            console.log("Invalid Game code");
+            callback({ gameState: null });
         }
     });
     socket.on("newMessage", function (messageBody, messageFromIndex, gameCode, callback) {
