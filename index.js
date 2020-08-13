@@ -251,9 +251,12 @@ io.on('connection', function (socket) {
         callback({ wordHint: originalWord });
         var timerVal = 90;
         socket.broadcast.emit("wordSelect", { wordHint: hint });
-        setInterval(() => {
+        var timerRefres = setInterval(() => {
             socket.broadcast.emit("timerVal", { timerVal: timerVal-- });
-
+            if (timerVal == 0) {
+                clearInterval(timerRefres);
+                console.log("done");
+            }
         }, 1000);
     });
 
