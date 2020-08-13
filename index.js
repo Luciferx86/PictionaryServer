@@ -252,7 +252,7 @@ io.on('connection', function (socket) {
         var timerVal = 90;
         socket.broadcast.emit("wordSelect", { wordHint: hint });
         setTimeout(() => {
-            socket.emit("timerVal", timerVal);
+            socket.emit("timerVal", { timerVal: timerVal });
             timerVal--;
         }, 1000);
     });
