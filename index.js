@@ -155,6 +155,7 @@ io.on('connection', function (socket) {
                 allGames[gameCode].whoseDrawing = whoseTurn;
                 console.log("changing turn");
                 console.log(whoseTurn);
+                clearInterval(allGames[gameCode].timer);
                 callback({ wordGuessed: true, isMyTurn: messageFromIndex == whoseTurn })
                 socket.broadcast.emit("turnChange", {
                     whoseTurn
