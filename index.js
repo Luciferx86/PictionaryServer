@@ -88,6 +88,7 @@ io.on('connection', function (socket) {
         allGames[val].isStarted = false;
         allGames[val].currentWord = "";
         allGames[val].whoseDrawing = 0;
+        allGames[val].timer = null;
         console.log("Creating new game");
         console.log(allGames);
         console.log(val);
@@ -249,12 +250,12 @@ io.on('connection', function (socket) {
         console.log(hint);
         console.log(originalWord);
         callback({ wordHint: originalWord });
-        var timerVal = 90;
+        var timerVal = 89;
         socket.broadcast.emit("wordSelect", { wordHint: hint });
-        var timerRefres = setInterval(() => {
+        allGames[gameCode].timer = setInterval(() => {
             socket.broadcast.emit("timerVal", { timerVal: timerVal-- });
             if (timerVal == 0) {
-                clearInterval(timerRefres);
+                clearInterval(allGames[gameCode].timer);
                 console.log("done");
             }
         }, 1000);
