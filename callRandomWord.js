@@ -1,3 +1,4 @@
-var randomPictionaryWords = require('word-pictionary-list');
-
-    console.log(randomPictionaryWords(3));
+var timerVal = 90;
+setInterval(() => {
+    console.log(timerVal--);
+}, 1000);
