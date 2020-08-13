@@ -249,7 +249,12 @@ io.on('connection', function (socket) {
         console.log(hint);
         console.log(originalWord);
         callback({ wordHint: originalWord });
+        var timerVal = 90;
         socket.broadcast.emit("wordSelect", { wordHint: hint });
+        setTimeout(() => {
+            socket.emit("timerVal", timerVal);
+            timerVal--;
+        }, 1000);
     });
 
     socket.on("getGames", function (callback) {
