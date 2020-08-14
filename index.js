@@ -118,6 +118,8 @@ io.on('connection', function (socket) {
 
             if (!checkPlayerExists(gameCode, playerName)) {
 
+                globalGameCode = gameCode;
+
                 allGames[gameCode].players.push({ playerName, score: 0, rank: allGames[gameCode].players.length, hasGuessedCurrent: false });
                 console.log("Join game happened somewhere");
                 console.log(gameCode);
