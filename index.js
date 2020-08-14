@@ -61,6 +61,7 @@ io.on('connection', function (socket) {
     socket.on("touch", function (x, y) {
         console.log("Touch event happened somewhere");
         console.log(x + ", " + y);
+        console.log(globalGameCode);
         socket.in(globalGameCode).broadcast.emit("touch", {
             touchX: x,
             touchY: y
