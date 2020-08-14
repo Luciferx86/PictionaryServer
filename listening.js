@@ -22,3 +22,7 @@ socket.on("turnChange", function (response) {
 socket.on("joinGame", function (response) {
     console.log(response);
 })
+
+socket.emit("joinGame", "listeningPLayer", '9678', function (response) {
+    console.log(response);
+})

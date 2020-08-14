@@ -28,9 +28,9 @@ socket.on("createGame", function (code) {
 //     console.log(response["code"]);
 // });
 
-// socket.emit("joinGame", "Lucifer35", '3279', function (response) {
-//     console.log(response);
-// });
+socket.emit("joinGame", "Lucifer35", '9678', function (response) {
+    console.log(response);
+});
 
 // socket.emit("startGame", "3279", function (response) {
 //     console.log(response);
@@ -40,10 +40,10 @@ socket.on("createGame", function (code) {
 //     console.log(response);
 // })
 
-socket.emit("newMessage", "porno", '2', "3279", function (response) {
-    console.log(response);
-    console.log("Posted");
-});
+// socket.emit("newMessage", "porno", '2', "3279", function (response) {
+//     console.log(response);
+//     console.log("Posted");
+// });
 
 // socket.emit("genRandomWords", function (val) {
 //     val["randomWords"].forEach((word) => {
