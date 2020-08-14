@@ -49,7 +49,7 @@ io.on('connection', function (socket) {
         console.log(allGames);
         console.log(val);
         callback({
-            gameState: allGames[val], code: val,
+            gameState: allGames[val], gameCode: val,
             newPlayer: { playerName, score: 0, rank: allGames[val].players.length - 1 }
         });
         socket.join(val);

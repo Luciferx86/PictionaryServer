@@ -23,6 +23,6 @@ socket.on("joinGame", function (response) {
     console.log(response);
 })
 
-socket.emit("joinGame", "listeningPLayer", 1672, function (response) {
+socket.emit("joinGame", "listeningPLayer", '9678', function (response) {
     console.log(response);
 })

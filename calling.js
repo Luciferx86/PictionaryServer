@@ -28,7 +28,7 @@ socket.on("createGame", function (code) {
 //     console.log(response["code"]);
 // });
 
-socket.emit("joinGame", "Lucifer35", '1672', function (response) {
+socket.emit("joinGame", "Lucifer35", '9678', function (response) {
     console.log(response);
 });
 
