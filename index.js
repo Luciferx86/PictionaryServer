@@ -171,6 +171,8 @@ io.on('connection', function (socket) {
                 socket.broadcast.in(gameCode).emit("turnChange", {
                     whoseTurn
                 })
+            } else {
+                callback({ wordGuessed: true, isMyTurn: false })
             }
         } else {
             callback({ wordGuessed: false, isMyTurn: false });
