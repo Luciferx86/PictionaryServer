@@ -240,7 +240,7 @@ io.on('connection', function (socket) {
         socket.in(gameCode).broadcast.emit("startGame");
     });
 
-    socket.on("wordSelect", function (word, gameCode, callback) {
+    socket.on("wordSelect", function (word, gameCode, playerName, callback) {
         console.log("Word Select happened somewhere");
         console.log(word);
         allGames[gameCode].currentWord = word;
@@ -265,7 +265,7 @@ io.on('connection', function (socket) {
         console.log(originalWord);
         callback({ wordHint: originalWord });
         var timerVal = 89;
-        socket.in(gameCode).broadcast.emit("wordSelect", { wordHint: hint });
+        socket.in(gameCode).broadcast.emit("wordSelect", { wordHint: hint, whoseDrawing: playerName });
         allGames[gameCode].timer = setInterval(() => {
             socket.in(gameCode).broadcast.emit("timerVal", { timerVal: timerVal-- });
             if (timerVal == 0) {
