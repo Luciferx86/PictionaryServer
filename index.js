@@ -264,11 +264,11 @@ io.on('connection', function (socket) {
 
     socket.on("startGame", function (callback) {
         console.log("Game Start happened somewhere");
-        allGames[gameCode].isStarted = true;
-        allGames[gameCode].whoseDrawing = 0;
+        allGames[globalGameCode].isStarted = true;
+        allGames[globalGameCode].whoseDrawing = 0;
         var newWords = randomPictionaryWords(3);
         callback({ randomWords: newWords });
-        socket.in(gameCode).broadcast.emit("startGame");
+        socket.in(globalGameCode).broadcast.emit("startGame");
     });
 
     socket.on("wordSelect", function (word, playerName, callback) {
