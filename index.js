@@ -153,7 +153,7 @@ io.on('connection', function (socket) {
     var getAllScores = () => {
         var allScores = [];
         allGames[globalGameCode].players.forEach((player) => {
-            allScores.push({playerName: player.playerName, score: player.score});
+            allScores.push({ playerName: player.playerName, score: player.score });
         });
         return allScores;
     }
@@ -178,6 +178,7 @@ io.on('connection', function (socket) {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
             });
             if (checkIfAllPlayersGuessed(allGames[gameCode])) {
+                allGames[gameCode].players[allGames[gameCode.whoseDrawing]].score += getScoreFromTimerVal(timerVal);
                 resetHasGuessed(gameCode);
                 var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
                 allGames[gameCode].whoseDrawing = whoseTurn;
