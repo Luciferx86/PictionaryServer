@@ -161,33 +161,33 @@ io.on('connection', function (socket) {
     var emitAllScore = () => {
         socket.in(globalGameCode).broadcast.emit("allScores", { allScores: getAllScores() });
     }
-    socket.on("newMessage", function (messageBody, messageFromIndex, timerVal, gameCode, callback) {
+    socket.on("newMessage", function (messageBody, messageFromIndex, timerVal, callback) {
         // Now Logging incoming words and original word
         console.log("New Message happened somewhere");
         console.log(messageFromIndex);
         console.log("new guess: " + messageBody);
-        console.log("original word: " + allGames[gameCode].currentWord);
+        console.log("original word: " + allGames[globalGameCode].currentWord);
         // logging done
-        var messageFrom = allGames[gameCode].players[messageFromIndex].playerName;
+        var messageFrom = allGames[globalGameCode].players[messageFromIndex].playerName;
 
-        if (messageBody.toUpperCase() === allGames[gameCode].currentWord.toUpperCase()) {
+        if (messageBody.toUpperCase() === allGames[globalGameCode].currentWord.toUpperCase()) {
             increaseDrawersScroe(timerVal);
             // callback({ wordGuessed: true });
-            markPlayerHasGuessed(gameCode, messageFromIndex, timerVal);
+            markPlayerHasGuessed(globalGameCode, messageFromIndex, timerVal);
 
-            socket.in(gameCode).broadcast.emit("newMessage", {
+            socket.in(globalGameCode).broadcast.emit("newMessage", {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
             });
-            if (checkIfAllPlayersGuessed(allGames[gameCode])) {
+            if (checkIfAllPlayersGuessed(allGames[globalGameCode])) {
 
-                changeTurn(gameCode, callback, messageFromIndex);
+                changeTurn(globalGameCode, callback, messageFromIndex);
 
             } else {
                 callback({ wordGuessed: true, isMyTurn: false })
             }
         } else {
             callback({ wordGuessed: false, isMyTurn: false });
-            socket.in(gameCode).broadcast.emit("newMessage", {
+            socket.in(globalGameCode).broadcast.emit("newMessage", {
                 newMessage: { messageBody, messageFrom }
             });
         }
@@ -195,16 +195,16 @@ io.on('connection', function (socket) {
 
     });
 
-    function changeTurn(gameCode, callback, messageFromIndex) {
-        resetHasGuessed(gameCode);
-        var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
-        allGames[gameCode].whoseDrawing = whoseTurn;
+    function changeTurn(callback, messageFromIndex) {
+        resetHasGuessed(globalGameCode);
+        var whoseTurn = parseInt(allGames[globalGameCode].whoseDrawing) + 1 == allGames[globalGameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
+        allGames[globalGameCode].whoseDrawing = whoseTurn;
         console.log("changing turn");
         console.log(whoseTurn);
-        clearInterval(allGames[gameCode].timer);
+        clearInterval(allGames[globalGameCode].timer);
         callback({ wordGuessed: true, isMyTurn: messageFromIndex == whoseTurn, allScores: getAllScores() });
         emitAllScore();
-        socket.broadcast.in(gameCode).emit("turnChange", {
+        socket.broadcast.in(globalGameCode).emit("turnChange", {
             whoseTurn
         })
     }
@@ -215,14 +215,14 @@ io.on('connection', function (socket) {
         allGames[globalGameCode].players[whoseDrawing].score += timerVal * 5;
     }
 
-    function markPlayerHasGuessed(gameCode, playerIndex, timerVal) {
-        allGames[gameCode].players[playerIndex].hasGuessedCurrent = true;
-        allGames[gameCode].players[playerIndex].score += getScoreFromTimerVal(timerVal);
+    function markPlayerHasGuessed( playerIndex, timerVal) {
+        allGames[globalGameCode].players[playerIndex].hasGuessedCurrent = true;
+        allGames[globalGameCode].players[playerIndex].score += getScoreFromTimerVal(timerVal);
     }
 
-    function resetHasGuessed(gameCode) {
-        for (var i = 0; i < allGames[gameCode].players.length; i++) {
-            allGames[gameCode].players[i].hasGuessedCurrent = false;
+    function resetHasGuessed() {
+        for (var i = 0; i < allGames[globalGameCode].players.length; i++) {
+            allGames[globalGameCode].players[i].hasGuessedCurrent = false;
         }
     }
 
@@ -248,16 +248,16 @@ io.on('connection', function (socket) {
         return retVal;
     }
 
-    socket.on("turnChange", function (rank, gameCode, callback) {
+    socket.on("turnChange", function (rank, callback) {
         console.log("Turn Change happened somewhere");
         console.log(rank);
-        console.log(allGames[gameCode].players.length);
+        console.log(allGames[globalGameCode].players.length);
 
-        var whoseTurn = parseInt(rank) + 1 == allGames[gameCode].players.length ? 1 : parseInt(rank) + 1 + 1
-        allGames[gameCode].whoseDrawing = whoseTurn;
+        var whoseTurn = parseInt(rank) + 1 == allGames[globalGameCode].players.length ? 1 : parseInt(rank) + 1 + 1
+        allGames[globalGameCode].whoseDrawing = whoseTurn;
         console.log(whoseTurn);
         callback({ whoseTurn });
-        socket.in(gameCode).broadcast.emit("turnChange", {
+        socket.in(globalGameCode).broadcast.emit("turnChange", {
             whoseTurn
         })
     });
@@ -272,10 +272,10 @@ io.on('connection', function (socket) {
         socket.in(gameCode).broadcast.emit("startGame");
     });
 
-    socket.on("wordSelect", function (word, gameCode, playerName, callback) {
+    socket.on("wordSelect", function (word, playerName, callback) {
         console.log("Word Select happened somewhere");
         console.log(word);
-        allGames[gameCode].currentWord = word;
+        allGames[globalGameCode].currentWord = word;
 
         var originalWord = "";
         var hint = "";
@@ -297,11 +297,11 @@ io.on('connection', function (socket) {
         console.log(originalWord);
         callback({ wordHint: originalWord });
         var timerVal = 89;
-        socket.in(gameCode).broadcast.emit("wordSelect", { wordHint: hint, whoseDrawing: playerName });
-        allGames[gameCode].timer = setInterval(() => {
-            socket.in(gameCode).broadcast.emit("timerVal", { timerVal: timerVal-- });
+        socket.in(globalGameCode).broadcast.emit("wordSelect", { wordHint: hint, whoseDrawing: playerName });
+        allGames[globalGameCode].timer = setInterval(() => {
+            socket.in(globalGameCode).broadcast.emit("timerVal", { timerVal: timerVal-- });
             if (timerVal == 0) {
-                clearInterval(allGames[gameCode].timer);
+                clearInterval(allGames[globalGameCode].timer);
                 console.log("done");
             }
         }, 1000);
