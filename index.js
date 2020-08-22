@@ -180,7 +180,7 @@ io.on('connection', function (socket) {
             });
             if (checkIfAllPlayersGuessed(allGames[gameCode])) {
 
-                changeTurn(gameCode, callback);
+                changeTurn(gameCode, callback, messageFromIndex);
 
             } else {
                 callback({ wordGuessed: true, isMyTurn: false })
@@ -195,7 +195,7 @@ io.on('connection', function (socket) {
 
     });
 
-    function changeTurn(gameCode, callback) {
+    function changeTurn(gameCode, callback, messageFromIndex) {
         resetHasGuessed(gameCode);
         var whoseTurn = parseInt(allGames[gameCode].whoseDrawing) + 1 == allGames[gameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
         allGames[gameCode].whoseDrawing = whoseTurn;
