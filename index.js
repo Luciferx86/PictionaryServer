@@ -216,6 +216,7 @@ io.on('connection', function (socket) {
     }
 
     function markPlayerHasGuessed(playerIndex, timerVal) {
+        console.log(globalGameCode);
         allGames[globalGameCode].players[playerIndex].hasGuessedCurrent = true;
         allGames[globalGameCode].players[playerIndex].score += getScoreFromTimerVal(timerVal);
     }
