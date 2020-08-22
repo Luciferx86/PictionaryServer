@@ -215,7 +215,7 @@ io.on('connection', function (socket) {
         allGames[globalGameCode].players[whoseDrawing].score += timerVal * 5;
     }
 
-    function markPlayerHasGuessed( playerIndex, timerVal) {
+    function markPlayerHasGuessed(playerIndex, timerVal) {
         allGames[globalGameCode].players[playerIndex].hasGuessedCurrent = true;
         allGames[globalGameCode].players[playerIndex].score += getScoreFromTimerVal(timerVal);
     }
@@ -262,7 +262,7 @@ io.on('connection', function (socket) {
         })
     });
 
-    socket.on("startGame", function (gameCode, callback) {
+    socket.on("startGame", function (callback) {
         console.log("Game Start happened somewhere");
         console.log(gameCode);
         allGames[gameCode].isStarted = true;
