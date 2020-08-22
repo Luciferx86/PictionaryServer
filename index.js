@@ -173,7 +173,7 @@ io.on('connection', function (socket) {
         if (messageBody.toUpperCase() === allGames[globalGameCode].currentWord.toUpperCase()) {
             increaseDrawersScroe(timerVal);
             // callback({ wordGuessed: true });
-            markPlayerHasGuessed(globalGameCode, messageFromIndex, timerVal);
+            markPlayerHasGuessed(messageFromIndex, timerVal);
 
             socket.in(globalGameCode).broadcast.emit("newMessage", {
                 newMessage: { messageBody: messageFrom + " guessed the word!", messageFrom: "Game" }
