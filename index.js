@@ -197,7 +197,7 @@ io.on('connection', function (socket) {
 
     function changeTurn(callback, messageFromIndex) {
         resetHasGuessed(globalGameCode);
-        var whoseTurn = parseInt(allGames[globalGameCode].whoseDrawing) + 1 == allGames[globalGameCode].players.length ? 0 : parseInt(allGames[gameCode].whoseDrawing) + 1;
+        var whoseTurn = parseInt(allGames[globalGameCode].whoseDrawing) + 1 == allGames[globalGameCode].players.length ? 0 : parseInt(allGames[globalGameCode].whoseDrawing) + 1;
         allGames[globalGameCode].whoseDrawing = whoseTurn;
         console.log("changing turn");
         console.log(whoseTurn);
