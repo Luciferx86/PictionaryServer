@@ -151,9 +151,9 @@ io.on('connection', function (socket) {
     });
 
     var getAllScores = () => {
-        var allScores = {};
+        var allScores = [];
         allGames[globalGameCode].players.forEach((player) => {
-            allScores[player.playerName] = player.score;
+            allScores.push({playerName: player.playerName, score: player.score});
         });
         return allScores;
     }
