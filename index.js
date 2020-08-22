@@ -264,7 +264,6 @@ io.on('connection', function (socket) {
 
     socket.on("startGame", function (callback) {
         console.log("Game Start happened somewhere");
-        console.log(gameCode);
         allGames[gameCode].isStarted = true;
         allGames[gameCode].whoseDrawing = 0;
         var newWords = randomPictionaryWords(3);
