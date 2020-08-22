@@ -180,7 +180,7 @@ io.on('connection', function (socket) {
             });
             if (checkIfAllPlayersGuessed(allGames[globalGameCode])) {
 
-                changeTurn(globalGameCode, callback, messageFromIndex);
+                changeTurn(callback, messageFromIndex);
 
             } else {
                 callback({ wordGuessed: true, isMyTurn: false })
