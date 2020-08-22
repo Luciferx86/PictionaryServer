@@ -40,18 +40,21 @@ io.on('connection', function (socket) {
 
     var globalGameCode = 0;
 
-    socket.on("createGame", function (playerName, callback) {
+    socket.on("createGame", function (playerName, numberOfRounds, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
         globalGameCode = val;
         allGames[val] = { players: [] };
         allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length, hasGuessedCurrent: false, score: 0, isActive: true });
         allGames[val].isStarted = false;
+        allGames[val].roundsCount = numberOfRounds;
         allGames[val].currentWord = "";
         allGames[val].whoseDrawing = 0;
         allGames[val].timer = null;
         console.log("Creating new game");
-        console.log(allGames);
         console.log(val);
+        console.log("Rounds Count : " + numberOfRounds);
+        console.log(allGames);
+
         callback({
             gameState: allGames[val], gameCode: val,
             newPlayer: { playerName, score: 0, rank: allGames[val].players.length - 1 }
