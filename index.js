@@ -210,7 +210,9 @@ io.on('connection', function (socket) {
     }
 
     function increaseDrawersScroe(timerVal) {
-        allGames[globalGameCode].players[allGames[globalGameCode].whoseDrawing].score += timerVal * 5;
+        var playerCount = allGames[globalGameCode].players.length;
+        var whoseDrawing = allGames[globalGameCode].whoseDrawing;
+        allGames[globalGameCode].players[whoseDrawing].score += timerVal * 5;
     }
 
     function markPlayerHasGuessed(gameCode, playerIndex, timerVal) {
