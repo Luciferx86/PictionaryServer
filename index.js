@@ -203,7 +203,7 @@ io.on('connection', function (socket) {
         console.log(whoseTurn);
         clearInterval(allGames[globalGameCode].timer);
         emitAllScore();
-        socket.in(globalGameCode).emit("turnChange", {
+        io.sockets.in(globalGameCode).emit("turnChange", {
             whoseTurn
         })
     }
