@@ -1,6 +1,7 @@
 var express = require('express');
 var randomPictionaryWords = require('word-pictionary-list');
 const { globalAgent } = require('http');
+const { ENGINE_METHOD_PKEY_ASN1_METHS } = require('constants');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -198,9 +199,21 @@ io.on('connection', function (socket) {
 
     });
 
-    function changeTurn() {
+    function incrementRoundCount() {
+        allGames[globalGameCode].currentRound++;
+    }
+
+    async function changeTurn() {
         resetHasGuessed(globalGameCode);
         var whoseTurn = getWhoseTurnNow();
+        if (whoseTurn == 0) {
+            incrementRoundCount();
+            if (allGames[globalGameCode].currentRound > allGames[globalGameCode].roundsCount) {
+                endGame();
+            } else {
+                await showRoundEnded();
+            }
+        }
         allGames[globalGameCode].whoseDrawing = whoseTurn;
         console.log("changing turn");
         console.log(whoseTurn);
@@ -210,6 +223,17 @@ io.on('connection', function (socket) {
             whoseTurn
         })
     }
+
+    function endGame() {
+
+    }
+
+    async function showRoundEnded() {
+        io.sockets.in(globalGameCode).emit("roundChange", {
+            playerStats: allGames[globalGameCode].players
+        })
+    }
+
 
     function getWhoseTurnNow() {
         return parseInt(allGames[globalGameCode].whoseDrawing) + 1
@@ -275,6 +299,8 @@ io.on('connection', function (socket) {
         console.log("Game Start happened somewhere");
         allGames[globalGameCode].isStarted = true;
         allGames[globalGameCode].whoseDrawing = 0;
+        allGames[globalGameCode].currentRound = 1;
+        allGames[globalGameCode].currentRound = 1;
         var newWords = randomPictionaryWords(3);
         callback({ randomWords: newWords });
         socket.in(globalGameCode).broadcast.emit("startGame");
