@@ -230,7 +230,9 @@ io.on('connection', function (socket) {
 
     async function showRoundEnded() {
         io.sockets.in(globalGameCode).emit("roundChange", {
-            playerStats: allGames[globalGameCode].players
+            playerStats: allGames[globalGameCode].players.map((player) => {
+                return { playerName: player.playerName, score: player.score };
+            })
         })
     }
 
