@@ -234,7 +234,7 @@ io.on('connection', function (socket) {
                 return { playerName: player.playerName, score: player.score };
             })
         })
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
 
