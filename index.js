@@ -29,7 +29,7 @@ var checkPlayerExists = (gameCode, playerName) => {
 }
 
 var getScoreFromTimerVal = (timerVal) => {
-    return timerVal * 15;
+    return timerVal * 6;
 }
 
 io.on('connection', function (socket) {
@@ -247,7 +247,7 @@ io.on('connection', function (socket) {
     function increaseDrawersScroe(timerVal) {
         var playerCount = allGames[globalGameCode].players.length;
         var whoseDrawing = allGames[globalGameCode].whoseDrawing;
-        allGames[globalGameCode].players[whoseDrawing].score += timerVal * 5;
+        allGames[globalGameCode].players[whoseDrawing].score += (timerVal * 6) / playerCount;
     }
 
     function markPlayerHasGuessed(playerIndex, timerVal) {
