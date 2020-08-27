@@ -41,11 +41,11 @@ io.on('connection', function (socket) {
 
     var globalGameCode = 0;
 
-    socket.on("createGame", function (playerName, numberOfRounds, callback) {
+    socket.on("createGame", function (playerName, avatarState, numberOfRounds, callback) {
         var val = Math.floor(1000 + Math.random() * 9000);
         globalGameCode = val;
         allGames[val] = { players: [] };
-        allGames[val].players.push({ playerName, score: 0, rank: allGames[val].players.length, hasGuessedCurrent: false, score: 0, isActive: true });
+        allGames[val].players.push({ playerName, score: 0, avatarState: avatarState, rank: allGames[val].players.length, hasGuessedCurrent: false, score: 0, isActive: true });
         allGames[val].isStarted = false;
         allGames[val].roundsCount = numberOfRounds;
         allGames[val].currentWord = "";
@@ -117,7 +117,7 @@ io.on('connection', function (socket) {
 
 
 
-    socket.on("joinGame", function (playerName, gameCode, callback) {
+    socket.on("joinGame", function (playerName, avatarState, gameCode, callback) {
         console.log(gameCode);
         console.log(playerName);
         socket.join(gameCode);
@@ -128,7 +128,7 @@ io.on('connection', function (socket) {
 
                 globalGameCode = gameCode;
 
-                allGames[gameCode].players.push({ playerName, score: 0, rank: allGames[gameCode].players.length, hasGuessedCurrent: false, score: 0, isActive: true });
+                allGames[gameCode].players.push({ playerName, avatarState: avatarState, score: 0, rank: allGames[gameCode].players.length, hasGuessedCurrent: false, score: 0, isActive: true });
                 console.log("Join game happened somewhere");
                 console.log(gameCode);
                 console.log("game status : ")
