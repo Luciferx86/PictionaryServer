@@ -58,7 +58,7 @@ io.on('connection', function (socket) {
 
         callback({
             gameState: allGames[val], gameCode: val,
-            newPlayer: { playerName, score: 0, rank: allGames[val].players.length - 1 }
+            newPlayer: { playerName, score: 0, rank: allGames[val].players.length - 1, playerAvatar: avatarState }
         });
         socket.join(val);
         // socket.broadcast.emit("createGame", {
