@@ -139,7 +139,7 @@ io.on('connection', function (socket) {
                     newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1 }
                 })
                 socket.in(gameCode).broadcast.emit("joinGame", {
-                    newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1 }
+                    newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1, playerAvatar: avatarState }
                 });
 
                 socket.in(gameCode).broadcast.emit("newMessage", {
