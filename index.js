@@ -209,6 +209,9 @@ io.on('connection', function (socket) {
         var whoseTurn = getWhoseTurnNow();
         if (whoseTurn == 0) {
             // A round has been completed.
+            console.log("A Rround completed");
+            console.log("New round number: " + allGames[globalGameCode].currentRound);
+            console.log("Total Rounds: " + allGames[globalGameCode].roundsCount);
             incrementRoundCount();
             if (allGames[globalGameCode].currentRound > allGames[globalGameCode].roundsCount) {
                 endGame();
