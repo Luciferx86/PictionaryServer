@@ -218,16 +218,17 @@ io.on('connection', function (socket) {
                 emitAllScore();
             } else {
                 await showRoundEnded();
-                allGames[globalGameCode].whoseDrawing = whoseTurn;
-                console.log("changing turn");
-                console.log(whoseTurn);
-                clearInterval(allGames[globalGameCode].timer);
-                emitAllScore();
-                io.sockets.in(globalGameCode).emit("turnChange", {
-                    whoseTurn
-                })
+
             }
         }
+        allGames[globalGameCode].whoseDrawing = whoseTurn;
+        console.log("changing turn");
+        console.log(whoseTurn);
+        clearInterval(allGames[globalGameCode].timer);
+        emitAllScore();
+        io.sockets.in(globalGameCode).emit("turnChange", {
+            whoseTurn
+        })
 
     }
 
