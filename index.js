@@ -187,7 +187,7 @@ io.on('connection', function (socket) {
                 console.log("All Players Guessed the word");
                 changeTurn();
 
-            }else{
+            } else {
                 console.log("All Players did not guess the word");
             }
         } else {
@@ -201,7 +201,7 @@ io.on('connection', function (socket) {
     });
 
     function incrementRoundCount() {
-        allGames[globalGameCode].currentRound++;
+        allGames[globalGameCode].currentRound = allGames[globalGameCode].currentRound + 1;
     }
 
     async function changeTurn() {
