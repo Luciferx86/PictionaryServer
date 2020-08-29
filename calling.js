@@ -24,25 +24,25 @@ socket.on("createGame", function (code) {
 
 })
 
-// socket.emit("createGame", "firstUser", function (response) {
+// socket.emit("createGame", "firstUser", {}, 3, function (response) {
 //     console.log(response["gameCode"]);
 // });
 
-// socket.emit("joinGame", "Lucifer35", '7255', function (response) {
+// socket.emit("joinGame", "Lucifer35", {},'2831', function (response) {
 //     console.log(response);
 // });
 
-// socket.emit("startGame", "7255", function (response) {
-//     console.log(response);
-// })
+socket.emit("startGame", function (response) {
+    console.log(response);
+})
 
 // socket.emit("wordSelect", "church", "7255", function (response) {
 //     console.log(response);
 // })
 
-socket.on("touch", 12, 13, function (response) {
-    console.log(response);
-})
+// socket.on("touch", 12, 13, function (response) {
+//     console.log(response);
+// })
 
 // socket.emit("newMessage", "porno", '2', "3279", function (response) {
 //     console.log(response);

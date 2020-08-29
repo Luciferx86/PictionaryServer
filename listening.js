@@ -28,9 +28,9 @@ socket.on("move", function (response) {
 })
 
 
-// socket.emit("joinGame", "listeningPLayer", '7255', function (response) {
-//     console.log(response);
-// })
+socket.emit("joinGame", "listeningPLayer", {},'2831', function (response) {
+    console.log(response);
+})
 
 // socket.emit("newMessage", "church", 1, '7255', function (response) {
 //     console.log(response);

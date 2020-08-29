@@ -136,7 +136,7 @@ io.on('connection', function (socket) {
                 callback({
                     gameState: allGames[gameCode],
                     gameCode,
-                    newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1 }
+                    newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1, playerAvatar: avatarState }
                 })
                 socket.in(gameCode).broadcast.emit("joinGame", {
                     newPlayer: { playerName, score: 0, rank: allGames[gameCode].players.length - 1, playerAvatar: avatarState }
@@ -176,7 +176,6 @@ io.on('connection', function (socket) {
 
         if (messageBody.toUpperCase() === allGames[globalGameCode].currentWord.toUpperCase()) {
             increaseDrawersScroe(timerVal);
-            // callback({ wordGuessed: true });
             markPlayerHasGuessed(messageFromIndex, timerVal);
 
             socket.in(globalGameCode).broadcast.emit("newMessage", {
