@@ -163,7 +163,7 @@ io.on('connection', function (socket) {
     }
 
     var emitAllScore = () => {
-        socket.in(globalGameCode).broadcast.emit("allScores", { allScores: getAllScores() });
+        socket.in(globalGameCode).emit("allScores", { allScores: getAllScores() });
     }
     socket.on("newMessage", function (messageBody, messageFromIndex, timerVal, callback) {
         // Now Logging incoming words and original word
@@ -206,25 +206,30 @@ io.on('connection', function (socket) {
         resetHasGuessed(globalGameCode);
         var whoseTurn = getWhoseTurnNow();
         if (whoseTurn == 0) {
+            // A round has been completed.
             incrementRoundCount();
             if (allGames[globalGameCode].currentRound > allGames[globalGameCode].roundsCount) {
                 endGame();
+                emitAllScore();
             } else {
                 await showRoundEnded();
+                allGames[globalGameCode].whoseDrawing = whoseTurn;
+                console.log("changing turn");
+                console.log(whoseTurn);
+                clearInterval(allGames[globalGameCode].timer);
+                emitAllScore();
+                io.sockets.in(globalGameCode).emit("turnChange", {
+                    whoseTurn
+                })
             }
         }
-        allGames[globalGameCode].whoseDrawing = whoseTurn;
-        console.log("changing turn");
-        console.log(whoseTurn);
-        clearInterval(allGames[globalGameCode].timer);
-        emitAllScore();
-        io.sockets.in(globalGameCode).emit("turnChange", {
-            whoseTurn
-        })
+
     }
 
     function endGame() {
-
+        socket.in(globalGameCode).emit("gameEnded", {
+            allScores: getAllScores()
+        });
     }
 
     async function showRoundEnded() {
@@ -301,7 +306,6 @@ io.on('connection', function (socket) {
         console.log("Game Start happened somewhere");
         allGames[globalGameCode].isStarted = true;
         allGames[globalGameCode].whoseDrawing = 0;
-        allGames[globalGameCode].currentRound = 1;
         allGames[globalGameCode].currentRound = 1;
         var newWords = randomPictionaryWords(3);
         callback({ randomWords: newWords });
