@@ -216,6 +216,7 @@ io.on('connection', function (socket) {
             if (allGames[globalGameCode].currentRound > allGames[globalGameCode].roundsCount) {
                 endGame();
                 emitAllScore();
+                return;
             } else {
                 await showRoundEnded();
 
