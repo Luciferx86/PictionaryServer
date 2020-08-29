@@ -184,9 +184,11 @@ io.on('connection', function (socket) {
 
             callback({ wordGuessed: true })
             if (checkIfAllPlayersGuessed(allGames[globalGameCode])) {
-
+                console.log("All Players Guessed the word");
                 changeTurn();
 
+            }else{
+                console.log("All Players did not guess the word");
             }
         } else {
             callback({ wordGuessed: false });
