@@ -348,6 +348,7 @@ io.on('connection', function (socket) {
         allGames[globalGameCode].timer = setInterval(() => {
             socket.in(globalGameCode).broadcast.emit("timerVal", { timerVal: timerVal-- });
             if (timerVal == 0) {
+                changeTurn();
                 clearInterval(allGames[globalGameCode].timer);
                 console.log("done");
             }
