@@ -205,6 +205,7 @@ io.on('connection', function (socket) {
     }
 
     async function changeTurn() {
+        clearInterval(allGames[globalGameCode].timer);
         resetHasGuessed(globalGameCode);
         var whoseTurn = getWhoseTurnNow();
         if (whoseTurn == 0) {
@@ -349,7 +350,7 @@ io.on('connection', function (socket) {
             socket.in(globalGameCode).broadcast.emit("timerVal", { timerVal: timerVal-- });
             if (timerVal == 0) {
                 changeTurn();
-                clearInterval(allGames[globalGameCode].timer);
+                // clearInterval(allGames[globalGameCode].timer);
                 console.log("done");
             }
         }, 1000);
