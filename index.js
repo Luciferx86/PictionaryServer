@@ -234,7 +234,7 @@ io.on('connection', function (socket) {
     }
 
     function endGame() {
-        socket.in(globalGameCode).emit("gameEnded", {
+        io.sockets.in(globalGameCode).emit("gameEnded", {
             allScores: getAllScores()
         });
     }
