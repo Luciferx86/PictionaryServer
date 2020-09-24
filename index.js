@@ -310,6 +310,7 @@ io.on('connection', function (socket) {
         })
     });
 
+
     socket.on("startGame", function (callback) {
         console.log("Game Start happened somewhere");
         allGames[globalGameCode].isStarted = true;
@@ -348,6 +349,9 @@ io.on('connection', function (socket) {
         socket.in(globalGameCode).broadcast.emit("wordSelect", { wordHint: hint, whoseDrawing: playerName });
         allGames[globalGameCode].timer = setInterval(() => {
             socket.in(globalGameCode).broadcast.emit("timerVal", { timerVal: timerVal-- });
+            // if (timerVal % 10 == 0) {
+            //     emitUpdatedHint();
+            // }
             if (timerVal == 0) {
                 allGames[globalGameCode].currentWord = "";
                 changeTurn();
